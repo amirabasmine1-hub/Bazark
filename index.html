@@ -1,0 +1,495 @@
+<!DOCTYPE html><html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بازارک</title><style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+}
+
+header {
+    background: white;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #ddd;
+}
+
+.header {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.search {
+    flex: 1;
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+button {
+    border: 0;
+    padding: 11px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #6c4cff;
+    color: white;
+}
+
+main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px 15px;
+}
+
+.hero {
+    background: #6c4cff;
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.category {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.ads {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.ad {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.ad-image {
+    height: 150px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+}
+
+.ad-content {
+    padding: 12px;
+}
+
+.ad-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.price {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.location {
+    color: #777;
+    font-size: 13px;
+}
+
+.actions {
+    display: flex;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.favorite {
+    background: #eee;
+    color: #222;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-box {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+}
+
+.close {
+    float: left;
+    background: #eee;
+    color: #222;
+}
+
+.dark {
+    background: #111;
+    color: white;
+}
+
+.dark header,
+.dark .category,
+.dark .ad,
+.dark .modal-box {
+    background: #1d1d1d;
+    color: white;
+}
+
+.dark .search,
+.dark .modal input,
+.dark .modal textarea,
+.dark .modal select {
+    background: #222;
+    color: white;
+    border-color: #444;
+}
+
+@media(max-width:700px) {
+    .header {
+        flex-wrap: wrap;
+    }
+
+    .search {
+        order: 3;
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ads {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:430px) {
+    .ads {
+        grid-template-columns: 1fr;
+    }
+}
+</style></head><body><header>
+<div class="header"><div class="logo">بازارک</div><input
+class="search"
+id="search"
+placeholder="جستجوی آگهی..."
+oninput="searchAds()"
+
+«»
+
+<button onclick="openModal()">ثبت آگهی</button>
+
+<button onclick="darkMode()">☾</button>
+
+</div>
+</header><main><section class="hero">
+<h1>بازارک</h1>
+<p>خرید و فروش آسان و سریع</p>
+</section><h2>دسته‌بندی‌ها</h2><div class="categories"><div class="category" onclick="filterAds('موبایل')">📱<br>موبایل</div>
+<div class="category" onclick="filterAds('کامپیوتر')">💻<br>کامپیوتر</div>
+<div class="category" onclick="filterAds('گیم')">🎮<br>گیم</div>
+<div class="category" onclick="filterAds('خودرو')">🚗<br>خودرو</div>
+<div class="category" onclick="filterAds('خانه')">🏠<br>خانه</div>
+<div class="category" onclick="filterAds('لباس')">👕<br>لباس</div>
+<div class="category" onclick="filterAds('کتاب')">📚<br>کتاب</div>
+<div class="category" onclick="filterAds('سایر')">📦<br>سایر</div></div><h2>آگهی‌ها</h2><div class="ads" id="ads"></div></main><div class="modal" id="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button>
+
+<h2>ثبت آگهی</h2><input id="title" placeholder="عنوان آگهی"><input id="price" type="number" placeholder="قیمت"><input id="location" placeholder="شهر / محدوده"><select id="category">
+<option>موبایل</option>
+<option>کامپیوتر</option>
+<option>گیم</option>
+<option>خودرو</option>
+<option>خانه</option>
+<option>لباس</option>
+<option>کتاب</option>
+<option>سایر</option>
+</select><textarea id="description" placeholder="توضیحات"></textarea><button onclick="addAd()">انتشار آگهی</button>
+
+</div></div><script>
+
+let ads = JSON.parse(localStorage.getItem("bazaarAds")) || [
+
+{
+title: "Galaxy S23",
+price: 18000000,
+location: "تهران",
+category: "موبایل",
+icon: "📱"
+},
+
+{
+title: "PS5 Slim",
+price: 42000000,
+location: "تهران",
+category: "گیم",
+icon: "🎮"
+},
+
+{
+title: "لپ‌تاپ گیمینگ",
+price: 55000000,
+location: "کرج",
+category: "کامپیوتر",
+icon: "💻"
+},
+
+{
+title: "دوچرخه کوهستان",
+price: 9000000,
+location: "تبریز",
+category: "سایر",
+icon: "🚲"
+}
+
+];
+
+let favorites =
+JSON.parse(localStorage.getItem("favorites")) || [];
+
+function save() {
+    localStorage.setItem("bazaarAds", JSON.stringify(ads));
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+}
+
+function money(number) {
+    return Number(number).toLocaleString("fa-IR") + " تومان";
+}
+
+function showAds(list = ads) {
+
+    const container = document.getElementById("ads");
+
+    if (list.length === 0) {
+        container.innerHTML = "<p>آگهی‌ای پیدا نشد.</p>";
+        return;
+    }
+
+    container.innerHTML = list.map((ad, index) => {
+
+        const liked = favorites.includes(index);
+
+        return `
+        <div class="ad">
+
+            <div class="ad-image">
+                ${ad.icon || "📦"}
+            </div>
+
+            <div class="ad-content">
+
+                <div class="ad-title">
+                    ${ad.title}
+                </div>
+
+                <div class="price">
+                    ${money(ad.price)}
+                </div>
+
+                <div class="location">
+                    📍 ${ad.location}
+                </div>
+
+                <div class="actions">
+
+                    <button
+                    class="favorite"
+                    onclick="favorite(${index})">
+                    ${liked ? "❤️" : "♡"}
+                    </button>
+
+                    <button
+                    onclick="contactSeller(${index})">
+                    💬 پیام
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+        `;
+
+    }).join("");
+}
+
+function favorite(index) {
+
+    if (favorites.includes(index)) {
+
+        favorites =
+        favorites.filter(x => x !== index);
+
+    } else {
+
+        favorites.push(index);
+
+    }
+
+    save();
+    showAds();
+}
+
+function contactSeller(index) {
+
+    alert(
+        "پیام به فروشنده «" +
+        ads[index].title +
+        "»\n\nاین بخش در نسخه کامل به سیستم چت وصل می‌شود."
+    );
+
+}
+
+function searchAds() {
+
+    const text =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
+
+    const result = ads.filter(ad =>
+        ad.title.toLowerCase().includes(text) ||
+        ad.category.toLowerCase().includes(text) ||
+        ad.location.toLowerCase().includes(text)
+    );
+
+    showAds(result);
+}
+
+function filterAds(category) {
+
+    showAds(
+        ads.filter(ad =>
+            ad.category === category
+        )
+    );
+
+}
+
+function openModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function addAd() {
+
+    const title =
+    document.getElementById("title").value.trim();
+
+    const price =
+    document.getElementById("price").value;
+
+    const location =
+    document.getElementById("location").value.trim();
+
+    const category =
+    document.getElementById("category").value;
+
+    const description =
+    document.getElementById("description").value.trim();
+
+    if (!title || !price || !location) {
+
+        alert("لطفاً اطلاعات اصلی آگهی را وارد کنید.");
+        return;
+
+    }
+
+    ads.unshift({
+
+        title: title,
+
+        price: Number(price),
+
+        location: location,
+
+        category: category,
+
+        description: description,
+
+        icon: "📦"
+
+    });
+
+    save();
+
+    document.getElementById("title").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("description").value = "";
+
+    closeModal();
+
+    showAds();
+
+}
+
+function darkMode() {
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "darkMode",
+        document.body.classList.contains("dark")
+    );
+
+}
+
+if (
+    localStorage.getItem("darkMode") === "true"
+) {
+    document.body.classList.add("dark");
+}
+
+showAds();
+
+</script></body>
+</html>
